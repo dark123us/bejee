@@ -3,17 +3,43 @@ import {
   SELECT_PAGE, ERROR,
   TASK_LOADING, TASK_LOAD_SUCCESS, TASK_LOAD_FAIL,
   TASK_CREATING, TASK_CREATE_SUCCESS,
+  CHANGE_SORT_ORDER, CHANGE_SORT_FIELD,
 } from "./actiontype.js";
 
-import {
-  DEVELOPER, SITE, URI,
-} from "./constant.js";
-import { setToken } from './service.js';
-
-import { getParamsRequestLoadTasks } from './selector.js';
+import { getToken, setToken, clearToken, api } from './service.js';
+import { getParamsRequestLoadTasks, getFieldSort } from './selector.js';
 
 export const showError = error => ({type: ERROR, payload: {error}});
-export const checkToken = () => ({type: CHECK_TOKEN});
+
+export const checkToken = () => {
+  return dispatch => {
+    const token = getToken();
+    dispatch({type: SET_TOKEN, payload: {token}});
+  }
+}
+export const onLogout = () => {
+  return dispatch => {
+    clearToken();
+    dispatch(checkToken());
+  }
+}
+
+export const onLogin = (username, password) => {
+  return async dispatch => {
+    dispatch({type: CHECKING_LOGIN});
+    const res = await api({
+      command: "login",
+      method: "POST",
+      formParams: {username, password}
+    });
+    if (res.ok) {
+      setToken(res.message.token);
+      dispatch(checkToken());
+    } else {
+      dispatch(showError(res.message));
+    }
+  }
+}
 
 export const selectPage = page => {
   return dispatch => {
@@ -25,34 +51,18 @@ export const selectPage = page => {
 export const createTask = (username, email, text) => {
   return async (dispatch, getState) => {
     dispatch({type: TASK_CREATING});
-    try {
-      const url = SITE + URI +"create?"+ new URLSearchParams({
-        developer: DEVELOPER,
-      });
-      const formData = new FormData();
-      formData.append("username", username);
-      formData.append("email", email);
-      formData.append("text", text);
-      const options = {
-        mode: 'cors', 
-        method: 'POST', 
-        body: formData,
-      };
-      const response = await fetch(url, options);
-      if (response.ok){
-        const res = await response.json();
-        if (res.status === 'ok'){
-          dispatch({type: TASK_CREATE_SUCCESS, payload: res.message});
-          dispatch(loadTasks());
-        } else {
-          showError(res.message);
-        }
-      }
-    } catch (e){
-      const msg = 'Что-то пошло не так';
-      showError(msg);
+    const res = await api({
+      command: "create", 
+      method: "POST", 
+      formParams: {username, email, text},
+    });
+
+    if (res.ok){
+      dispatch({type: TASK_CREATE_SUCCESS, payload: res.message});
+      dispatch(loadTasks());
+    } else {
+      dispatch(showError(res.message));
     }
-    return 'done';
   }
 }
 
@@ -60,60 +70,29 @@ export const loadTasks = () => {
   return async (dispatch, getState) => {
     const { sortField, sortDirection, page } = getParamsRequestLoadTasks( getState() );
     dispatch({type: TASK_LOADING});
-    try {
-      const response = await fetch(SITE + URI +"?"+ new URLSearchParams({
-        developer: DEVELOPER,
+    const res = await api({
+      reqParams: {
         sort_field: sortField,
         sort_direction: sortDirection?"asc":"desc",
         page: page
-      }), {mode:'cors'});
-      if (response.ok){
-        const res = await response.json();
-        if (res.status === 'ok'){
-          dispatch({type: TASK_LOAD_SUCCESS, payload: res.message});
-        } else {
-          dispatch({type: TASK_LOAD_FAIL, payload: res.message});
-        }
       }
-    } catch (e){
-      const msg = 'Что-то пошло не так';
-      showError(msg);
-      dispatch({type: TASK_LOAD_FAIL, payload: msg});
+    });
+    if (res.ok){
+      dispatch({type: TASK_LOAD_SUCCESS, payload: res.message});
+    } else {
+      dispatch(showError(res.message));
     }
-    return 'done';
   }
 }
 
-export const onLogin = (username, password) => {
-  return async dispatch => {
-    dispatch({type: CHECKING_LOGIN});
-    try {
-      const url = SITE + URI +"login?"+ new URLSearchParams({
-        developer: DEVELOPER,
-      });
-      const formData = new FormData();
-      formData.append("username", username);
-      formData.append("password", password);
-      const options = {
-        mode: 'cors', 
-        method: 'POST', 
-        body: formData,
-      };
-      const response = await fetch(url, options);
-      if (response.ok){
-        const res = await response.json();
-        if (res.status === 'ok'){
-          console.log(res.message);
-          setToken(res.message.token);
-          checkToken();
-        } else {
-          showError(res.message);
-        }
-      }
-    } catch (e){
-      const msg = 'Что-то пошло не так';
-      showError(msg);
+export const sortBy = (field) => {
+  return (dispatch, getState) => {
+    if ( field === getFieldSort(getState()) ){
+      dispatch({type: CHANGE_SORT_ORDER})
+    } else {
+      dispatch({ type: CHANGE_SORT_FIELD, payload:{field} });
     }
-    return 'done';
+    dispatch(loadTasks());
   }
 }
+

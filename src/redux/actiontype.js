@@ -11,6 +11,7 @@ export const TASK_LOAD_FAIL = "TASK_LOAD_FAIL";
 export const TASK_CREATING = "TASK_CREATING";
 export const TASK_CREATE_SUCCESS = "TASK_CREATE_SUCCESS";
 export const ERROR = "ERROR";
-
+export const CHANGE_SORT_ORDER = "CHANGE_SORT_ORDER";
+export const CHANGE_SORT_FIELD = "CHANGE_SORT_FIELD";
 
 

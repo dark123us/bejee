@@ -5,9 +5,10 @@ export const getMessage = state => {return state[MESSAGE] };
 export const getTasks = state => {return state[TASKS] };
 export const getPagination = state => {return state[PAGE] };
 export const getParamsRequestLoadTasks = state => ({
-  sortField: state[SORT].field,
+  sortField: getFieldSort(state),
   sortDirection: state[SORT].direction,
   page: state[PAGE].current,
 });
 
 export const isCheckingLogin = state => state[STATE] === STATES.CHECK_LOGIN;
+export const getFieldSort = state => state[SORT].field;

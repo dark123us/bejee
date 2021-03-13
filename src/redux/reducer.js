@@ -11,10 +11,9 @@ import {
   TASK_LOAD_SUCCESS,
   TASK_CREATE_SUCCESS,
   SELECT_PAGE, 
-  CHECKING_LOGIN, SET_TOKEN, CHECK_TOKEN,
+  CHECKING_LOGIN, SET_TOKEN,
+  CHANGE_SORT_ORDER, CHANGE_SORT_FIELD,
 } from './actiontype.js';
-
-import { getToken } from './service.js';
 
 const initialState = {
   [SORT]: {direction: true, field: 'id' },
@@ -58,9 +57,19 @@ const main = (state = initialState, action) => {
       return { ...state,
         [STATE]: STATES.CHECKING_LOGIN,
       }
-    case CHECK_TOKEN:
+    case SET_TOKEN:
+      const { token } = action.payload;
       return { ...state, 
-        [TOKEN]: getToken()
+        [TOKEN]: token
+      };
+    case CHANGE_SORT_ORDER:
+      return { ...state, 
+        [SORT]: { ...state[SORT], direction: !state[SORT].direction }
+      };
+    case CHANGE_SORT_FIELD:
+      const { field } = action.payload;
+      return { ...state,
+        [SORT]: { direction: true, field }
       };
 		default:{
 			return state;

@@ -4,23 +4,32 @@ import { Redirect } from 'react-router-dom';
 import { Tasks, Pagination, Auth, Message } from '../components/index.js';
 import styles from '../styles/main.module.css';
 import { getToken, getMessage, getTasks, getPagination } from '../redux/selector.js';
-import { createTask, selectPage, loadTasks, showError } from '../redux/action.js';
-//import { escapeHtml } from '../redux/service.js';
+import { createTask, selectPage, loadTasks, showError, onLogout, sortBy,
+} from '../redux/action.js';
 
 
-const Main = ({ token, message, tasks, pages, createTask, selectPage, showError }) => {
+const Main = ({ token, message, tasks, pages, 
+  createTask, selectPage, showError, onLogout,
+  sortBy,
+}) => {
   const [redirectLogin, setRedirect] = useState(false);
 
 	const handleCreateTask = (name, email, text) => {
-    if (!(name || email || text)) {
+    if (!(name && email && text)) {
       showError("поля не заполнены");
     } else {
-  		//createTask( escapeHtml(name), escapeHtml(email), escapeHtml(text) );
   		createTask( name, email, text );
     }
 	}
   const handleLogin = () => {
-    setRedirect(true);
+    if (token) {
+      onLogout();
+    } else {
+      setRedirect(true);
+    }
+  }
+  const handleSort = field => {
+    sortBy(field);
   }
   const handleSelectPage = (numberPage) => {
     if (numberPage > 0 && numberPage !== pages.current && numberPage <= pages.count){
@@ -41,6 +50,7 @@ const Main = ({ token, message, tasks, pages, createTask, selectPage, showError 
 				<Message data={message} />
 				<Tasks data={tasks} 
 					onCreate={(name, email, text) => handleCreateTask(name, email, text)} 
+          onSortBy={(field) => handleSort(field)}
 				/>
 				<Pagination 
             onSelect={numberPage => handleSelectPage(numberPage)}
@@ -62,6 +72,8 @@ const mapDispatchToProps = dispatch => ({
 	createTask: (name, email, text) => dispatch(createTask(name, email, text)),
 	selectPage: numberPage => dispatch(selectPage(numberPage)),
   showError: msg => dispatch(showError(msg)),
+  onLogout: () => dispatch(onLogout()),
+  sortBy: field => dispatch(sortBy(field)),
 });
 
 const connectMain = connect(mapStateToProps, mapDispatchToProps)(Main);
