@@ -3,11 +3,15 @@ import { connect } from "react-redux";
 import { Tasks, Pagination, Auth, Message } from '../components/index.js';
 import styles from '../styles/main.module.css';
 import { getToken, getMessage, getTasks, getPagination } from '../redux/selector.js';
-import { createTask, selectPage, loadTasks } from '../redux/action.js';
+import { createTask, selectPage, loadTasks, showError } from '../redux/action.js';
 
-const Main = ({ createTask, auth, message, tasks, pages, selectPage, onTest }) => {
+const Main = ({ createTask, auth, message, tasks, pages, selectPage, onTest, showError }) => {
 	const handleCreateTask = (name, email, text) => {
-		createTask(name, email, text);
+    if (!(name || email || text)){
+      showError("поля не заполнены");
+    } else {
+  		createTask( new String(name), new String (email),  new String (text) );
+    }
 	}
   const handleSelectPage = (numberPage) => {
     if (numberPage > 0 && numberPage != pages.current && numberPage <= pages.count){
@@ -48,6 +52,7 @@ const mapDispatchToProps = dispatch => ({
 	createTask: (name, email, text) => dispatch(createTask(name, email, text)),
 	selectPage: numberPage => dispatch(selectPage(numberPage)),
   onTest: () => dispatch(loadTasks()),
+  showError: msg => dispatch(showError(msg)),
 });
 
 const connectMain = connect(mapStateToProps, mapDispatchToProps)(Main);

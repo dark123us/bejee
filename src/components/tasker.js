@@ -1,19 +1,19 @@
 import React, { useState } from 'react';
 
 export const TaskInput = ({onCreate}) => {
-  const [name, setName] = useState("");
+  const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [text, setText] = useState("");
   const handleCreate = e => {
     e.preventDefault();
-    onCreate(name, email, text);
-    setName(""); setEmail(""); setText("");
+    onCreate(username, email, text);
+    setUsername(""); setEmail(""); setText("");
   }
 
   return (
     <form className="row " onSubmit={() => handleCreate()}>
       <div className="col-sm-3">
-        <input type="text" className="form-control" onChange={ e => setName(e.target.value) } value={name} />
+        <input type="text" className="form-control" onChange={ e => setUsername(e.target.value) } value={username} />
       </div>
       <div className="col-sm-3">
         <input type="text" className="form-control" onChange={ e => setEmail(e.target.value) } value={email} />
@@ -30,18 +30,18 @@ export const TaskInput = ({onCreate}) => {
   )
 }
 
-export const TaskHeader = ({onSortByName, onSortByEmail, onSortByText}) => (
+export const TaskHeader = ({onSortByUsername, onSortByEmail, onSortByText}) => (
 	<div className="row">
-		<div className="col-sm-3" onClick={onSortByName}>ИМЯ</div>
+		<div className="col-sm-3" onClick={onSortByUsername}>ИМЯ</div>
 		<div className="col-sm-3" onClick={onSortByEmail}>EMAIL</div>
 		<div className="col-sm-6" onClick={onSortByText}>ТЕКСТ</div>
 	</div>
 
 )
 
-export const Task = ({name, email, text}) => (
+export const Task = ({username, email, text}) => (
 	<div className="row">
-		<div className="col-sm-3 overflow-auto">{name}</div>
+		<div className="col-sm-3 overflow-auto">{username}</div>
 		<div className="col-sm-3 overflow-auto">{email}</div>
 		<div className="col-sm-6 overflow-auto">{text}</div>
 	</div>
@@ -51,7 +51,7 @@ export const Tasks = ({data, onCreate}) => {
 	return (
 		<div className="container">
 			<TaskHeader />
-			{data.map( (task,i) => (<Task key={i} name={task.name} email={task.email} text={task.text} />) ) }
+			{data.map( (task,i) => (<Task key={i} username={task.username} email={task.email} text={task.text} />) ) }
       <TaskInput onCreate={onCreate}/>
 		</div>
 	)

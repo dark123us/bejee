@@ -3,6 +3,7 @@ import { CREATE, EDIT,
   CHANGE_STATE,
   SELECT_PAGE, ERROR,
   TASK_LOADING, TASK_LOAD_SUCCESS, TASK_LOAD_FAIL,
+  TASK_CREATING, 
 } from "./actiontype.js";
 
 import {
@@ -18,14 +19,29 @@ export const showError = error => ({type: ERROR, payload: {error}});
 
 export const createTask = (name, email, text) => {
   return async (dispatch, getState) => {
-    dispatch({type: TASK_LOADING});
+    dispatch({type: TASK_CREATING});
     try {
-      const response = await fetch(SITE + URI +"?"+ new URLSearchParams({
+      const url = SITE + URI +"create?"+ new URLSearchParams({
         developer: DEVELOPER,
-        sort_field: 'id',
-        sort_direction: 'asc',
-        page: 1
-      }), {mode:'cors'});
+      });
+      const formData = new FormData();
+      //formData.append("username", name);
+      //formData.append("email", email);
+      //formData.append("text", text);
+
+      formData.append("username", "Example");
+              formData.append("email", "example@example.com");
+              formData.append("text", "Some text");
+
+      const options = {
+        mode:'cors', 
+        method:'POST', 
+        body: formData,
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        }
+      };
+      const response = await fetch(url, options);
       if (response.ok){
         const res = await response.json();
         if (res.status === 'ok'){

@@ -1,15 +1,16 @@
 import React, {lazy, Suspense, useEffect} from 'react';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import { connect } from "react-redux";
-import { checkLogin } from './redux/action.js';
+import { checkLogin, loadTasks } from './redux/action.js';
 import './App.css';
 const Main = lazy( () => import('./containers/main'));
 const Login = lazy( () => import('./containers/login'));
 
-const App = ({ checkLogin }) => {
+const App = ({ checkLogin, loadTasks }) => {
 	useEffect(()=>{
 		checkLogin();
-	},[ checkLogin ])
+    loadTasks();
+	},[ checkLogin, loadTasks ])
 	return (
 		<Router>
 			<div className="App">
@@ -29,6 +30,7 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => ({
     checkLogin: () => dispatch(checkLogin()),
+    loadTasks: () => dispatch(loadTasks()),
 })
 
 const connectApp = connect(mapStateToProps, mapDispatchToProps)(App)
