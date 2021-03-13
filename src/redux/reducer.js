@@ -11,7 +11,7 @@ import {
   TASK_LOAD_SUCCESS,
   TASK_CREATE_SUCCESS,
   SELECT_PAGE, 
-  CHECK_LOGIN,
+  CHECKING_LOGIN, SET_TOKEN, CHECK_TOKEN,
 } from './actiontype.js';
 
 import { getToken } from './service.js';
@@ -21,7 +21,7 @@ const initialState = {
   [PAGE]: {current: 1, count:1},
   [TASKS]: [  ],
   [STATE]: STATES.UNDEFINED,
-
+  [TOKEN]: null
 }
 
 const main = (state = initialState, action) => {
@@ -52,9 +52,13 @@ const main = (state = initialState, action) => {
     case SELECT_PAGE:
       const {page} = action.payload;
       return { ...state,
-        [PAGE]: {...state[PAGE], current:page}
+        [PAGE]: {...state[PAGE], current:page},
       };
-    case CHECK_LOGIN:
+    case CHECKING_LOGIN:
+      return { ...state,
+        [STATE]: STATES.CHECKING_LOGIN,
+      }
+    case CHECK_TOKEN:
       return { ...state, 
         [TOKEN]: getToken()
       };

@@ -1,5 +1,5 @@
 import { 
-  CHECK_LOGIN, 
+  CHECKING_LOGIN, CHECK_TOKEN, SET_TOKEN,
   SELECT_PAGE, ERROR,
   TASK_LOADING, TASK_LOAD_SUCCESS, TASK_LOAD_FAIL,
   TASK_CREATING, TASK_CREATE_SUCCESS,
@@ -8,13 +8,12 @@ import {
 import {
   DEVELOPER, SITE, URI,
 } from "./constant.js";
+import { setToken } from './service.js';
 
 import { getParamsRequestLoadTasks } from './selector.js';
 
-export const checkLogin = () => ({type: CHECK_LOGIN });
-//export const createTask = (name, email, text) => ({type: CREATE, payload:{name, email, text}}) ;
-//export const selectPage = current => ({type: SELECT_PAGE, payload: {current} });
 export const showError = error => ({type: ERROR, payload: {error}});
+export const checkToken = () => ({type: CHECK_TOKEN});
 
 export const selectPage = page => {
   return dispatch => {
@@ -59,7 +58,6 @@ export const createTask = (username, email, text) => {
 
 export const loadTasks = () => {
   return async (dispatch, getState) => {
-    console.log(getState);
     const { sortField, sortDirection, page } = getParamsRequestLoadTasks( getState() );
     dispatch({type: TASK_LOADING});
     try {
@@ -86,3 +84,36 @@ export const loadTasks = () => {
   }
 }
 
+export const onLogin = (username, password) => {
+  return async dispatch => {
+    dispatch({type: CHECKING_LOGIN});
+    try {
+      const url = SITE + URI +"login?"+ new URLSearchParams({
+        developer: DEVELOPER,
+      });
+      const formData = new FormData();
+      formData.append("username", username);
+      formData.append("password", password);
+      const options = {
+        mode: 'cors', 
+        method: 'POST', 
+        body: formData,
+      };
+      const response = await fetch(url, options);
+      if (response.ok){
+        const res = await response.json();
+        if (res.status === 'ok'){
+          console.log(res.message);
+          setToken(res.message.token);
+          checkToken();
+        } else {
+          showError(res.message);
+        }
+      }
+    } catch (e){
+      const msg = 'Что-то пошло не так';
+      showError(msg);
+    }
+    return 'done';
+  }
+}

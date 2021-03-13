@@ -1,4 +1,4 @@
-import { TOKEN, PAGE, TASKS,  MESSAGE, SORT } from './constant.js';
+import { TOKEN, PAGE, TASKS,  MESSAGE, SORT, STATE, STATES } from './constant.js';
 
 export const getToken = state => { return state[TOKEN] };
 export const getMessage = state => {return state[MESSAGE] };
@@ -8,4 +8,6 @@ export const getParamsRequestLoadTasks = state => ({
   sortField: state[SORT].field,
   sortDirection: state[SORT].direction,
   page: state[PAGE].current,
-})
+});
+
+export const isCheckingLogin = state => state[STATE] === STATES.CHECK_LOGIN;

@@ -1,16 +1,16 @@
 import React, {lazy, Suspense, useEffect} from 'react';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import { connect } from "react-redux";
-import { checkLogin, loadTasks } from './redux/action.js';
+import { checkToken, loadTasks } from './redux/action.js';
 import './App.css';
 const Main = lazy( () => import('./containers/main'));
 const Login = lazy( () => import('./containers/login'));
 
-const App = ({ checkLogin, loadTasks }) => {
+const App = ({ checkToken, loadTasks }) => {
 	useEffect(()=>{
-		checkLogin();
+		checkToken();
     loadTasks();
-	},[ checkLogin, loadTasks ])
+	},[ checkToken, loadTasks ])
 	return (
 		<Router>
 			<div className="App">
@@ -29,7 +29,7 @@ const mapStateToProps = state => ({
 })
 
 const mapDispatchToProps = dispatch => ({
-    checkLogin: () => dispatch(checkLogin()),
+    checkToken: () => dispatch(checkToken()),
     loadTasks: () => dispatch(loadTasks()),
 })
 
