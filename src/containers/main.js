@@ -1,20 +1,22 @@
-import React, { useState, useEffect } from "react";
+import React  from "react";
 import { connect } from "react-redux";
 import { Tasks, Pagination, Auth, Message } from '../components/index.js';
 import styles from '../styles/main.module.css';
 import { getToken, getMessage, getTasks, getPagination } from '../redux/selector.js';
 import { createTask, selectPage, loadTasks, showError } from '../redux/action.js';
+import { escapeHtml } from '../redux/service.js';
 
 const Main = ({ createTask, auth, message, tasks, pages, selectPage, onTest, showError }) => {
 	const handleCreateTask = (name, email, text) => {
     if (!(name || email || text)){
       showError("поля не заполнены");
     } else {
-  		createTask( new String(name), new String (email),  new String (text) );
+  		//createTask( escapeHtml(name), escapeHtml(email), escapeHtml(text) );
+  		createTask( name, email, text );
     }
 	}
   const handleSelectPage = (numberPage) => {
-    if (numberPage > 0 && numberPage != pages.current && numberPage <= pages.count){
+    if (numberPage > 0 && numberPage !== pages.current && numberPage <= pages.count){
       selectPage(numberPage);
       console.log(numberPage);
     }

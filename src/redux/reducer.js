@@ -6,9 +6,12 @@ import {
 } from './constant.js';
 
 import { 
+  TASK_CREATING,
+  TASK_LOADING,
   TASK_LOAD_SUCCESS,
-  CREATE, SELECT_PAGE, 
-  EDIT, CHANGE_STATE, LOGIN, CHECK_LOGIN 
+  TASK_CREATE_SUCCESS,
+  SELECT_PAGE, 
+  CHECK_LOGIN,
 } from './actiontype.js';
 
 import { getToken } from './service.js';
@@ -16,25 +19,35 @@ import { getToken } from './service.js';
 const initialState = {
   [SORT]: {direction: true, field: 'id' },
   [PAGE]: {current: 1, count:1},
-  [STATE]: undefined,
-  [TASKS]: [
-    {name: 'name1', email: 'email1@email1.com', text: 'javascript: alert(1)'},
-    {name: 'name2', email: 'email2@email1.com', text: 'jds fsadf kdfh '},
-  ]
+  [TASKS]: [  ],
+  [STATE]: STATES.UNDEFINED,
 
 }
 
 const main = (state = initialState, action) => {
   switch (action.type){
+    case TASK_CREATING:
+      return { ...state,
+        [STATE]: STATES.TASK_CREATING,
+      };
+    case TASK_LOADING:
+      return { ...state,
+        [STATE]: STATES.TASK_LOADING,
+      };
     case TASK_LOAD_SUCCESS:
       const {tasks, total_task_count} = action.payload;
-      const count = (+total_task_count / TASKS_ON_PAGE | 0 ) + 1;
+      const count = ((+total_task_count -1) / TASKS_ON_PAGE | 0 ) + 1;
       return { ...state,
         [TASKS]: tasks,
+        [STATE]: STATES.DONE,
         [PAGE]: {
           current: (state[PAGE].current <= count)? state[PAGE].current: count,
           count
         },
+      };
+    case TASK_CREATE_SUCCESS:
+      return { ...state,
+        [STATE]: STATES.DONE,
       };
     case SELECT_PAGE:
       const {page} = action.payload;
@@ -45,18 +58,6 @@ const main = (state = initialState, action) => {
       return { ...state, 
         [TOKEN]: getToken()
       };
-		case CREATE:
-			const {name, email, text} = action.payload;
-      const pages = (state[TASKS].length  / TASKS_ON_PAGE | 0) + 1;
-			return { ...state,
-				[TASKS]: [...state[TASKS], {name, email, text}],
-        [PAGE]: {
-          current: pages, count:pages }
-			};
-		case CHANGE_STATE:
-			return { ...state,
-				[STATE]: STATES.BEGIN_CREATE,
-			};
 		default:{
 			return state;
 		}

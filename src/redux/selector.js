@@ -1,4 +1,4 @@
-import { TOKEN, PAGE, TASKS, STATE, STATES, MESSAGE, SORT } from './constant.js';
+import { TOKEN, PAGE, TASKS,  MESSAGE, SORT } from './constant.js';
 
 export const getToken = state => { return state[TOKEN] };
 export const getMessage = state => {return state[MESSAGE] };

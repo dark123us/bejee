@@ -7,10 +7,10 @@ const Pagination = ({count, current, onSelect}) => {
   const pages = [];
   for (let i=1; i<=count; i++){
     pages.push(
-        <li key={i} className={(i==current)?"page-item active":"page-item"}
+        <li key={i} className={(i===current)?"page-item active":"page-item"}
           onClick={() => onSelect(i)}
           >
-          <a className="page-link" href="#">{i}</a>
+          <a className="page-link" href="#back">{i}</a>
         </li>
     )
   }
@@ -18,14 +18,14 @@ const Pagination = ({count, current, onSelect}) => {
   return (
     <nav aria-label="...">
       <ul className="pagination">
-        <li className={(current==1)? "page-item disabled": "page-item"}
+        <li className={(current===1)? "page-item disabled": "page-item"}
           onClick={() => onSelect(current-1)} >
-          <a className="page-link" href="#" >Previous</a>
+          <a className="page-link" href="#{i}" >Previous</a>
         </li>
         { pages }
-        <li className={(current==count)?"page-item disabled":"page-item"}
+        <li className={(current===count)?"page-item disabled":"page-item"}
           onClick={() => onSelect(current+1)} >
-          <a className="page-link" href="#">Next</a>
+          <a className="page-link" href="#next">Next</a>
         </li>
       </ul>
     </nav>

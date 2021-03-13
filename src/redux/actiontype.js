@@ -8,6 +8,7 @@ export const TASK_LOADING = "TASK_LOADING";
 export const TASK_LOAD_SUCCESS = "TASK_LOAD_SUCCESS";
 export const TASK_LOAD_FAIL = "TASK_LOAD_FAIL";
 export const TASK_CREATING = "TASK_CREATING";
+export const TASK_CREATE_SUCCESS = "TASK_CREATE_SUCCESS";
 export const ERROR = "ERROR";
 
 
