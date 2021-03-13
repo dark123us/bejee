@@ -1,7 +1,7 @@
-import { Tasks, TaskHeader, Task, TaskInput }  from './tasker';
-import Pagination from './pagination';
-import Message from './message';
-import { LoginForm, Auth } from './auth';
+import { Tasks, TaskHeader, Task, TaskInput }  from './tasker.js';
+import Pagination from './pagination.js';
+import Message from './message.js';
+import { LoginForm, Auth } from './auth.js';
 
 export {
 	Tasks, TaskHeader, Task, TaskInput,
