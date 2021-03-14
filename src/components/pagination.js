@@ -8,7 +8,7 @@ const Pagination = ({count, current, onSelect}) => {
         pages.push(
             <li key={i} className={(i===current)?"page-item active":"page-item"}
                     onClick={() => onSelect(i)} >
-                <a className="page-link" href="#back">{i}</a>
+                <a className="page-link" href="#">{i}</a>
             </li>
         );
     }
@@ -18,12 +18,12 @@ const Pagination = ({count, current, onSelect}) => {
             <ul className="pagination">
                 <li className={(current===1)? "page-item disabled": "page-item"}
                         onClick={() => onSelect(current-1)} >
-                    <a className="page-link" href="#{i}" >Previous</a>
+                    <a className="page-link" href="#" >Previous</a>
                 </li>
                 { pages }
                 <li className={(current===count)?"page-item disabled":"page-item"}
                         onClick={() => onSelect(current+1)} >
-                    <a className="page-link" href="#next">Next</a>
+                    <a className="page-link" href="#">Next</a>
                 </li>
             </ul>
         </nav>
