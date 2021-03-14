@@ -80,7 +80,7 @@ export const TaskHeader = ({onSortBy, sortBy}) => {
     const cl = sortBy.direction?<i className="bi-caret-down" />:<i className="bi-caret-up" />;
     const f = sortBy.field;
     return (
-        <div className="row fs-3">
+        <div className="row fs-4">
             <div className="col-sm-3 cursor-pointer border text-truncate " onClick={() => onSortBy('username')}>
                 {f==='username'?cl:""} ИМЯ ПОЛЬЗОВАТЕЛЯ
             </div>
