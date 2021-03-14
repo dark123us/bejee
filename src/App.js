@@ -12,16 +12,16 @@ const App = ({ checkToken, loadTasks }) => {
     loadTasks();
 	},[ checkToken, loadTasks ])
 	return (
-		<Router>
 			<div className="App">
+		<Router>
 				<Suspense fallback={<div>Loading...</div>}>
 					<Switch>
 						<Route exact  path='/' component={Main} />
 						<Route path='/login' component={Login} />
 					</Switch>
 				</Suspense>
-			</div>
 		</Router>
+			</div>
 	);
 }
 

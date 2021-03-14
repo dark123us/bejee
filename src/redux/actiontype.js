@@ -12,7 +12,9 @@ export const TASK_CREATING = "TASK_CREATING";
 export const TASK_CREATE_SUCCESS = "TASK_CREATE_SUCCESS";
 export const TASK_SAVING = "TASK_SAVING";
 export const TASK_SAVE_SUCCESS = "TASK_SAVE_SUCCESS";
-export const ERROR = "ERROR";
+export const SHOW_ERROR = "SHOW_ERROR";
+export const SHOW_MESSAGE = "SHOW_MESSAGE";
+export const CLOSE_MESSAGE = "CLOSE_MESSAGE";
 export const CHANGE_SORT_ORDER = "CHANGE_SORT_ORDER";
 export const CHANGE_SORT_FIELD = "CHANGE_SORT_FIELD";
 
