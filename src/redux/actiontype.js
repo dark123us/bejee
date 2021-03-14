@@ -3,6 +3,7 @@ export const EDIT = "CREATE";
 export const CHECKING_LOGIN = "CHECKING_LOGIN";
 export const CHECK_TOKEN = "CHECK_TOKEN"
 export const SET_TOKEN = "SET_TOKEN";
+export const SHOW_LOGIN_FORM = "SHOW_LOGIN_FORM";
 export const CHANGE_STATE = "CHANGE_STATE";
 export const SELECT_PAGE = "SELECT_PAGE";
 export const TASK_LOADING = "TASK_LOADING";

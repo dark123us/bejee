@@ -81,14 +81,14 @@ export const TaskHeader = ({onSortBy, sortBy}) => {
     const f = sortBy.field;
     return (
         <div className="row fs-3">
-            <div className="col-sm-3 cursor-pointer border " onClick={() => onSortBy('username')}>
-                {f==='username'?cl:""}  ИМЯ
+            <div className="col-sm-3 cursor-pointer border text-truncate " onClick={() => onSortBy('username')}>
+                {f==='username'?cl:""} ИМЯ ПОЛЬЗОВАТЕЛЯ
             </div>
-            <div className="col-sm-3 cursor-pointer border " onClick={() => onSortBy('email')}>
+            <div className="col-sm-3 cursor-pointer border text-truncate" onClick={() => onSortBy('email')}>
                 {f==='email'?cl:""} EMAIL
             </div>
-            <div className="col-sm-4 border" >ТЕКСТ</div>
-            <div className="col-sm-2 cursor-pointer border " onClick={() => onSortBy('status')}>
+            <div className="col-sm-4 border text-truncate">ТЕКСТ ЗАДАЧИ</div>
+            <div className="col-sm-2 cursor-pointer border text-truncate" onClick={() => onSortBy('status')}>
                 {f==='status'?cl:""} СТАТУС
             </div>
         </div>

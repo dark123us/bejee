@@ -3,10 +3,14 @@ import { connect } from "react-redux";
 import {Redirect} from 'react-router-dom';
 import { LoginForm, Messages } from '../components/index.js';
 import { getToken, getMessage, isCheckingLogin } from '../redux/selector.js';
-import { onLogin, closeMessage } from '../redux/action.js';
+import { onLogin, closeMessage, showLoginForm } from '../redux/action.js';
 
-const Login = ({ onLogin, token, isCheckingLogin, message, onCloseMessage }) => {
+const Login = ({ onLogin, token, isCheckingLogin, message, 
+    onCloseMessage, showLoginForm 
+}) => {
+    
     const [redirect, setRedirect] = useState(false);
+    showLoginForm(false);
     useEffect(() => {
         if (token) setRedirect(true);
     }, [token, setRedirect]);
@@ -36,6 +40,7 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = dispatch => ({
     onLogin: (username, password) => dispatch(onLogin(username, password)),
     onCloseMessage: message => dispatch(closeMessage(message)),
+    showLoginForm: () => dispatch(showLoginForm(false)),
 })
 
 const connectLogin = connect(mapStateToProps, mapDispatchToProps)(Login)

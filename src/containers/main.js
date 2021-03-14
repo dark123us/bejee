@@ -1,9 +1,9 @@
-import React, { useState }  from "react";
+import React, { useState, useEffect }  from "react";
 import { connect } from "react-redux";
 import { Redirect } from 'react-router-dom';
 import { Tasks, Pagination, Auth, Messages, Loading } from '../components/index.js';
 import { getToken, getMessage, getTasks, getPagination, getSortBy,
-    getStateLoading,
+    getStateLoading, isShowLogin,
 } from '../redux/selector.js';
 import { createTask, editTask, selectPage, showError, 
     onLogout, onSortBy, closeMessage, showMessage,
@@ -11,7 +11,7 @@ import { createTask, editTask, selectPage, showError,
 
 const Main = ({ token, message, tasks, pages, isLoading,
     createTask, editTask, selectPage, showError, onLogout,
-    sortBy, onSortBy, onCloseMessage, onShowMessage,
+    sortBy, onSortBy, onCloseMessage, onShowMessage, isShowLogin,
 }) => {
     const [redirectLogin, setRedirect] = useState(false);
     const handleLogin = () => {
@@ -21,6 +21,9 @@ const Main = ({ token, message, tasks, pages, isLoading,
             setRedirect(true);
         }
     }
+    useEffect(() => {
+        if (isShowLogin) setRedirect(true);
+    }, [isShowLogin, setRedirect]);
     const handleSelectPage = (numberPage) => {
         if (numberPage > 0 && numberPage !== pages.current && numberPage <= pages.count){
             selectPage(numberPage);
@@ -69,6 +72,7 @@ const mapStateToProps = state => ({
     pages: getPagination(state),
     sortBy: getSortBy(state),
     isLoading: getStateLoading(state),
+    isShowLogin: isShowLogin(state),
 });
 
 const mapDispatchToProps = dispatch => ({

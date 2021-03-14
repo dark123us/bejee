@@ -1,7 +1,8 @@
 import {
     TOKEN, PAGE, MESSAGE,
     TASKS, STATE, STATES,
-    TASKS_ON_PAGE, SORT,
+    TASKS_ON_PAGE, SORT, 
+    SHOW_LOGIN,
 } from './constant.js';
 
 import { 
@@ -10,7 +11,7 @@ import {
   TASK_SAVE_SUCCESS,
   SELECT_PAGE, 
   SHOW_MESSAGE, CLOSE_MESSAGE,
-  CHECKING_LOGIN, SET_TOKEN,
+  CHECKING_LOGIN, SET_TOKEN, SHOW_LOGIN_FORM,
   CHANGE_SORT_ORDER, CHANGE_SORT_FIELD,
 } from './actiontype.js';
 
@@ -20,7 +21,8 @@ const initialState = {
     [TASKS]: [  ],
     [STATE]: STATES.UNDEFINED,
     [TOKEN]: null,
-    [MESSAGE]: []
+    [MESSAGE]: [],
+    [SHOW_LOGIN]: false,
 }
 
 let idmessage = 0;
@@ -49,6 +51,10 @@ const getNewMessage = payload => {
 
 const main = (state = initialState, action) => {
     switch (action.type){
+        case SHOW_LOGIN_FORM:
+            return {...state,
+                [SHOW_LOGIN]: action.payload,
+            };
         case CLOSE_MESSAGE:
             const { message } = action.payload;
             const newMessage = state[MESSAGE].filter(msg => msg.id !== message.id);
@@ -58,7 +64,8 @@ const main = (state = initialState, action) => {
         case SHOW_MESSAGE:
             const addMessages = getNewMessage(action.payload);
             return {...state,
-                [MESSAGE]: [ ...addMessages, ...state[MESSAGE] ]
+                [MESSAGE]: [ ...addMessages, ...state[MESSAGE] ],
+                [STATE]: STATES.DONE,
             };
         case TASK_CREATING:
             return { ...state,

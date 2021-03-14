@@ -1,5 +1,5 @@
 import { 
-    CHECKING_LOGIN, SET_TOKEN,
+    CHECKING_LOGIN, SET_TOKEN, SHOW_LOGIN_FORM,
     SELECT_PAGE, SHOW_MESSAGE, CLOSE_MESSAGE,
     TASK_LOADING, TASK_LOAD_SUCCESS, 
     TASK_SAVING, TASK_SAVE_SUCCESS,
@@ -20,6 +20,7 @@ export const checkToken = () => {
         dispatch({type: SET_TOKEN, payload: {token}});
     }
 }
+export const showLoginForm = isShow => ({type: SHOW_LOGIN_FORM, payload: isShow});
 export const onLogout = () => {
     return dispatch => {
         clearToken();
@@ -73,6 +74,8 @@ export const editTask = ({task, newtext, newstatus}) => {
         const token = getToken();
         if (!token) {
             dispatch(showError("Токен истёк"));
+            dispatch(checkToken());
+            dispatch(showLoginForm(true));
             return;
         }
         const res = await api({
