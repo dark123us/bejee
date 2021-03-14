@@ -1,8 +1,8 @@
 {
   "files": {
     "main.css": "/bejee/static/css/main.b9daab7d.chunk.css",
-    "main.js": "/bejee/static/js/main.0915e65b.chunk.js",
-    "main.js.map": "/bejee/static/js/main.0915e65b.chunk.js.map",
+    "main.js": "/bejee/static/js/main.8d7918ff.chunk.js",
+    "main.js.map": "/bejee/static/js/main.8d7918ff.chunk.js.map",
     "runtime-main.js": "/bejee/static/js/runtime-main.5f1982f1.js",
     "runtime-main.js.map": "/bejee/static/js/runtime-main.5f1982f1.js.map",
     "static/js/2.06045abd.chunk.js": "/bejee/static/js/2.06045abd.chunk.js",
@@ -21,6 +21,6 @@
     "static/js/runtime-main.5f1982f1.js",
     "static/js/2.06045abd.chunk.js",
     "static/css/main.b9daab7d.chunk.css",
-    "static/js/main.0915e65b.chunk.js"
+    "static/js/main.8d7918ff.chunk.js"
   ]
 }
