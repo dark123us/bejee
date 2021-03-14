@@ -2,6 +2,7 @@ import {
   CHECKING_LOGIN, CHECK_TOKEN, SET_TOKEN,
   SELECT_PAGE, ERROR,
   TASK_LOADING, TASK_LOAD_SUCCESS, TASK_LOAD_FAIL,
+  TASK_SAVING, TASK_SAVE_SUCCESS,
   TASK_CREATING, TASK_CREATE_SUCCESS,
   CHANGE_SORT_ORDER, CHANGE_SORT_FIELD,
 } from "./actiontype.js";
@@ -48,7 +49,7 @@ export const selectPage = page => {
   }
 }
 
-export const createTask = (username, email, text) => {
+export const createTask = ({username, email, text}) => {
   return async (dispatch, getState) => {
     dispatch({type: TASK_CREATING});
     const res = await api({
@@ -60,6 +61,28 @@ export const createTask = (username, email, text) => {
     if (res.ok){
       dispatch({type: TASK_CREATE_SUCCESS, payload: res.message});
       dispatch(loadTasks());
+    } else {
+      dispatch(showError(res.message));
+    }
+  }
+}
+
+export const editTask = ({task, newtext, newstatus}) => {
+  return async (dispatch, getState) => {
+    dispatch({type: TASK_SAVING});
+    const token = getToken();
+    if (!token) {
+      dispatch(showError("Токен истёк"));
+      return;
+    }
+    const res = await api({
+      command: "edit/" + task.id, 
+      method: "POST", 
+      formParams: {text: newtext, status:newstatus, token},
+    });
+
+    if (res.ok){
+      dispatch( {type: TASK_SAVE_SUCCESS, payload: {task, newtext, newstatus}} );
     } else {
       dispatch(showError(res.message));
     }
@@ -85,7 +108,7 @@ export const loadTasks = () => {
   }
 }
 
-export const sortBy = (field) => {
+export const onSortBy = (field) => {
   return (dispatch, getState) => {
     if ( field === getFieldSort(getState()) ){
       dispatch({type: CHANGE_SORT_ORDER})

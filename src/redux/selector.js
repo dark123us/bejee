@@ -12,3 +12,7 @@ export const getParamsRequestLoadTasks = state => ({
 
 export const isCheckingLogin = state => state[STATE] === STATES.CHECK_LOGIN;
 export const getFieldSort = state => state[SORT].field;
+export const getSortBy = state => ({
+  field: state[SORT].field, 
+  direction: state[SORT].direction
+});

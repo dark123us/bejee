@@ -10,6 +10,7 @@ import {
   TASK_LOADING,
   TASK_LOAD_SUCCESS,
   TASK_CREATE_SUCCESS,
+  TASK_SAVE_SUCCESS,
   SELECT_PAGE, 
   CHECKING_LOGIN, SET_TOKEN,
   CHANGE_SORT_ORDER, CHANGE_SORT_FIELD,
@@ -48,6 +49,16 @@ const main = (state = initialState, action) => {
       return { ...state,
         [STATE]: STATES.DONE,
       };
+    case TASK_SAVE_SUCCESS:
+      const { task, newtext, newstatus } = action.payload;
+      const prevTask = [...state[TASKS]];
+      prevTask.filter( t => t.id === task.id).forEach(t => {
+        t.text = newtext;
+        t.status = newstatus;
+      });
+      return { ...state,
+        [TASKS]: prevTask
+      }
     case SELECT_PAGE:
       const {page} = action.payload;
       return { ...state,
